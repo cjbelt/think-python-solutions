@@ -7,6 +7,22 @@ class Point(object):
     def __str__(self):
         return "(%s, %s)" % (self.x, self.y)
 
+    def __add__(self, other):
+        if isinstance(other, Point):
+            return self.add_points(other)
+        else:
+            return self.add_tuple(other)
+
+
+    def add_points(self, other):
+        return Point(self.x + other.x, self.y + other.y)
+
+    def add_tuple(self, other):
+        tx, ty = other
+        x = tx + self.x
+        y = ty + self.y
+        return Point(x, y)
+
 class Rectangle(object):
     """Represents a rectangle.
 
@@ -56,4 +72,5 @@ if __name__ == '__main__':
     # print(new_rect.corner.x, new_rect.corner.y)
     # print(rect.corner.x, rect.corner.y)
     p = Point(3, 4)
-    print(p)
+    # print(p)
+    print(black + blank)

@@ -1,3 +1,5 @@
+from Time1 import int_to_time
+
 class Time(object):
     """Represents the time of day.
 
@@ -12,3 +14,20 @@ class Time(object):
         self.hour = hour
         self.minute = minute
         self.second = second
+
+    def __add__(self, other):
+        if isinstance(other, Time):
+            return self.add_time(other)
+        else:
+            return self.increment(other)
+
+    def __radd__(self, other):
+        return self.__add__(other)
+
+    def add_time(self, other):
+        seconds = self.time_to_int() + other.time_to_int()
+        return int_to_time(seconds)
+
+    def increment(self, seconds):
+        seconds += self.time_to_int()
+        return int_to_time(seconds)
