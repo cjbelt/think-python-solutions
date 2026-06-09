@@ -31,3 +31,14 @@ class Time(object):
     def increment(self, seconds):
         seconds += self.time_to_int()
         return int_to_time(seconds)
+
+    def __lt__(self, other):
+        seconds = self.time_to_int() - other.time_to_int()
+        return seconds < 0
+
+    def __gt__(self, other):
+        seconds = self.time_to_int() - other.time_to_int()
+        return seconds > 0
+
+    def __eq__(self, other):
+        return self.time_to_int() == self.time_to_int()
