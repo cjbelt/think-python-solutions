@@ -22,7 +22,8 @@ class VectorEditor(Gui):
 
         self.row()
         self.bu(text="Save", command=self.save)
-        self.bu(text="New Canvas", command=self.canvas.clear)
+        self.file_en = self.en(text="canvas.eps")
+        self.bu(text="New Canvas", command=self.new_canvas)
 
     def start(self, event=None):
         if hasattr(event.widget, 'obj') and event.widget.obj:
@@ -76,17 +77,26 @@ class VectorEditor(Gui):
             start, end = self.selected.coords()
             x1, y1 = start
             x2, y2 = end
-            w = x2 - x1
-            h = y2 - y1
+            w = math.fabs(x2 - x1)
+            h = math.fabs(y2 - y1)
             area = w * h
             new_area = float(self.size_en.get())
-            dx = (h / area * new_area) + x1 - x2
-            dy = (h / area * new_area) + y1 - y2
+            proportion = math.sqrt(new_area/area)
+            new_h = h * proportion
+            new_w = w * proportion
+            dx = (new_w + x1) - x2
+            dy = (y1 - new_h) - y2
             self.selected.move_coord(1, dx, dy)
 
 
     def save(self):
-        """Save"""
+        self.canvas.dump(self.file_en.get())
+
+    def new_canvas(self, event=None):
+        self.canvas.clear()
+        self.selected = None
+        self.size_en.delete(0, END)
+        self.obj_label.config(text="")
 
 
 class VectorItem(Item):
@@ -118,6 +128,7 @@ class VectorItem(Item):
         self.editor.selected = self
         self.editor.size_en.delete(0, END)
         self.editor.size_en.insert(0, self.get_size())
+        self.editor.obj_label.config(text=f"{self.tag} ({self.type()})")
         event.widget.obj = True
 
 if __name__ == '__main__':
