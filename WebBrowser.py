@@ -16,7 +16,7 @@ class Browser(Gui):
         self.site_text = self.te(width=100, height=5)
         self.site_text.insert(0.0, "http://www.python.org")
         self.site_text.bind('<Return>', self.load_site)
-        self.go_btn = self.bu(text='Go', command=self.load_site)
+        self.go_btn = self.bu(text='Go', command=self.go_to_site)
         self.endrow()
         self.canvas = self.sc(width=600, height=1000, bg='white')
         self.canvas.width = self.canvas.canvas.get_width()
@@ -43,9 +43,6 @@ class Browser(Gui):
             self.ind += 1
             self.history.append(self.site_text.get(0.0, END))
 
-            if self.ind < len(self.history) - 1:
-                self.history = self.history[:self.ind + 1]
-
         except Exception as e:
             print(e)
             self.canvas.canvas.clear()
@@ -57,6 +54,12 @@ class Browser(Gui):
             self.ind -= 1
             self.site_text.insert(0.0, self.history[self.ind])
             self.load_site()
+
+    def go_to_site(self, event=None):
+        self.load_site()
+
+        if self.ind < len(self.history) - 1:
+            self.history = self.history[:self.ind + 1]
 
 class BrowserParser(HTMLParser):
     def __init__(self, canvas, browser):
